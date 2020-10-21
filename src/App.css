@@ -28,11 +28,55 @@
   color: #61dafb;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#gameboard-container {
+  margin: auto;
+}
+table {
+  /* display: block; */
+  margin: auto;
+}
+
+td {
+  background-color: #aad751; /*lighter green from google minesweeper*/
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  font-size: 30px;
+}
+
+.hidden {
+  background-color: #aad751 !important;
+}
+
+.shown {
+  background-color: blue;
+}
+
+.mine {
+  background-color: red;
+}
+
+._1 {
+  background-image: url('images/1-blue.png');
+  border-radius: 2px;
+  border-color: red;
+}
+
+._2 {
+  background-image: url('images/2-green.png');
+}
+
+.marked {
+  background-color: pink !important;
+}
+
+.timer-button {
+  width: 80px;
+  height: 30px;
+  margin: 15px;
 }
