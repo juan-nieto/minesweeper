@@ -2,18 +2,63 @@ import React, {Component} from 'react';
 import './App.css';
 import GameCell from './GameCell';
 import Timer from './Timer'
+import { useState } from 'react';
 
-function App() {
+class App extends React.Component{
+
+  state = {
+    isHardMode: false
+  }
+  constructor(props){
+    super(props);
+    // this.state = {
+    //   isHardMode: false
+    // }
+    this.handleToggleClick = this.handleToggleClick.bind(this);
+  }
+
+  handleToggleClick() {
+   // let isHardmode = this.state.isHardMode;
+    if(this.state.isHardMode) {
+      console.log("Setting state: " + this.state.isHardMode);
+      this.setState({isHardMode: false});
+    } else {
+      console.log("Else Setting state: " + this.state.isHardMode);
+      this.setState({isHardMode: true});
+    }
+  }
+  
+  render() {
+    let {isHardMode} = this.state;
+    let col, row, mines;
+
+    if(isHardMode) {
+      console.log("Creating minesweeper with difficulty mode: " + isHardMode);
+      col = 10;
+      row = 10;
+      mines = 8;
+    } else {
+      console.log("Creating minesweeper with difficulty mode: " + isHardMode);
+      col = 18;
+      row = 18;
+      mines = 40;
+    }
+
   return (
     <div className="App">
       <header className="App-header">
         <h1>Minesweeper</h1>
         <Timer/>       
-        <Gameboard nRows="10" nCols="10" nMines="8"></Gameboard>
-        <p>Remaining mines: 8</p>
+        <Gameboard key={isHardMode} isEasy={isHardMode} totRows={row} totColumns={col} totMines={mines}/>
+        
+        <button id="toggle-difficuly-button" className="difficulty-button"
+          onClick={this.handleToggleClick}  > {isHardMode? 'Hard Mode' : 'Easy Mode'}
+        </button>      
+        <p>Remaining mines: {mines}</p>
       </header>
     </div>
   );
+}
 } export default App;
 
 
@@ -24,7 +69,13 @@ const privateConstantMap = {
   STATE_MARKED: "marked"
 };
 
-type Props = {};
+type Props = {
+  isEasy: Boolean,
+  totColumns: number,
+  totRows: number,
+  totMines: number,
+  toggleDifficulty: Function
+};
 type State = {
   nCols: number,
   nRows: number,
@@ -42,9 +93,11 @@ export class Gameboard extends Component<State, Props> {
   
   constructor(props) {
     super(props);
-    let nCols = 10;
-    let nRows = 10;
-    let nMines = 8;
+    let {totColumns, totRows, totMines, isEasy} = this.props;
+    console.log("Constructing with totalCOlumns = " + totColumns);
+    let nCols = totColumns;
+    let nRows = totRows;
+    let nMines = totMines;
     let nmarked = 0;
     let nuncovered = 0;
     let exploded = false;
@@ -59,7 +112,6 @@ export class Gameboard extends Component<State, Props> {
       arr: this.array2d(nRows, nCols,
         () => ({mine: false, state: privateConstantMap.STATE_HIDDEN, count: 0}))
     };
-    //this.ff = this.ff.bind(this);
     this.uncover = this.uncover.bind(this);
   }
 
@@ -193,7 +245,6 @@ export class Gameboard extends Component<State, Props> {
       }
       gameboardArr[r][c].state = privateConstantMap.STATE_SHOWN;
       uncoveredUpdated++;
-      //console.log("uncoveredupdated: " + uncoveredUpdated);
       this.state.nuncovered = uncoveredUpdated;
       this.setState({nuncovered: uncoveredUpdated}, () => {
        console.log("updated nuncovered state in ff: " + this.state.nuncovered);
@@ -207,17 +258,8 @@ export class Gameboard extends Component<State, Props> {
       ff(r+1,c-1, gameboardArr, uncoveredUpdated);ff(r+1,c, gameboardArr, uncoveredUpdated);ff(r+1,c+1, gameboardArr, uncoveredUpdated);
     };
     ff(row,col, gameboardArr, uncoveredUpdated);
-    // for(let i = 0; i < gameboardArr.length; i++) {
-    //   for(let j = 0; j < gameboardArr.length; j++){
-    //     console.log("row: " + i + " col: " + j + " state: " + gameboardArr[i][j].state + " count: " + gameboardArr[i][j].count + " mine: " + gameboardArr[i][j].mine);
-    //   }
-    // }
+  
     this.setState({arr: gameboardArr}, () => {
-      // for(let i = 0; i < this.state.arr.length; i++) {
-      //   for(let j = 0; j < this.state.arr.length; j++){
-      //     console.log("ARR row: " + i + " col: " + j + " state: " + this.state.arr[i][j].state + " count: " + this.state.arr[i][j].count + " mine: " + this.state.arr[i][j].mine);
-      //   }
-      // }
     });
     
     this.setState({nuncovered: this.state.nuncovered}, () => {
@@ -236,7 +278,8 @@ export class Gameboard extends Component<State, Props> {
       let totalHiddenSquares = 0;
       for(let i = 0; i < this.state.arr.length; i++) {
         for(let j = 0; j < this.state.arr.length; j++) {
-          if(this.state.arr[i][j].state === privateConstantMap.STATE_HIDDEN) {
+          if(this.state.arr[i][j].state === privateConstantMap.STATE_HIDDEN
+              || this.state.arr[i][j].state === privateConstantMap.STATE_MARKED) {
             totalHiddenSquares++;
             //console.log("Hidden Squares remaining: " + totalHiddenSquares);
           }
@@ -248,7 +291,6 @@ export class Gameboard extends Component<State, Props> {
       }
     }
     
-   // this.getStatus();
     console.log("nuncovered state value: " + this.state.nuncovered + " , uncoveredUpdated temp var: " + uncoveredUpdated);
     return true;
   }
@@ -312,6 +354,7 @@ export class Gameboard extends Component<State, Props> {
   }
 
   render() {
+    let {isEasy} = this.props;
     return (
       <div id="gameboard-container">
         <table id="gameboard-table">

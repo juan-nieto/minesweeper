@@ -80,3 +80,10 @@ td {
   height: 30px;
   margin: 15px;
 }
+
+.difficulty-button {
+  width: 100px;
+  height: 40px;
+  margin: 15px;
+  padding: 5px;
+}
