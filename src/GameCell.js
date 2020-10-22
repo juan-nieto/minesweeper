@@ -92,7 +92,6 @@ class GameCell extends Component<Props, State> {
         onClick={this.handleCellClicked.bind(this)}
         onContextMenu={this.handleRightClick.bind(this)}
         >
-          {(state === privateConstantMap.STATE_SHOWN) ? count : ''}
       </td>
     );
   }

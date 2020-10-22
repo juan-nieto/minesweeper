@@ -30,6 +30,7 @@
 
 #gameboard-container {
   margin: auto;
+  max-width: 800px;
 }
 table {
   /* display: block; */
@@ -54,29 +55,59 @@ td {
 }
 
 .shown {
-  background-color: blue;
+  background-color:#e5c29f;
 }
 
-.mine {
+.shown.mine {
+  background-image: url('images/mine.png') !important;
+  background-size: contain;
   background-color: red;
 }
 
-._1 {
+.shown._1 {
   background-image: url('images/1-blue.png');
-  border-radius: 2px;
-  border-color: red;
+  background-size: contain;
 }
 
-._2 {
+.shown._2 {
   background-image: url('images/2-green.png');
+  background-size: contain;
+}
+
+.shown._3 {
+  background-image: url('images/3-red.png');
+  background-size: contain;
 }
 
 .marked {
-  background-color: pink !important;
+  background-image: url('images/flag_icon.png');
+  background-size: contain;
 }
 
 .timer-button {
   width: 80px;
   height: 30px;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 20px;
+  border-radius: 3px;
+  border-color:  #dea5a4;
+}
+
+.difficulty-button {
+  width: 100px;
+  height: 40px;
   margin: 15px;
+  padding: 5px;
+  border-radius: 3px;
+  border-color:  #dea5a4;
+}
+
+.title-minesweeper {
+  color: #dea5a4;
+  margin-bottom: 0px;
+}
+
+#timer-wrapper {
+  display: flex;
 }
